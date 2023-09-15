@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 public class TemperatureRequest implements RequestType {
     @Override
-    public ResponseEntity<?> retrive(UserInfoRequest userInfoRequest) {
+    public ResponseEntity<?> retrieve(UserInfoRequest userInfoRequest) {
         return null;
     }
 }

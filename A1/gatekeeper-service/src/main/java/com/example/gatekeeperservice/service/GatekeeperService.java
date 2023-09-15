@@ -3,13 +3,7 @@ package com.example.gatekeeperservice.service;
 import com.example.gatekeeperservice.RequestType;
 import com.example.gatekeeperservice.RequestTypeFactory;
 import com.example.gatekeeperservice.dto.ErrorResponse;
-import com.example.gatekeeperservice.dto.LocationResponse;
 import com.example.gatekeeperservice.dto.UserInfoRequest;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +24,7 @@ public class GatekeeperService {
 //        }
         else {
             RequestType requestType = RequestTypeFactory.getInstance(userInfoRequest.getKey());
-            return requestType.retrive(userInfoRequest);
+            return requestType.retrieve(userInfoRequest);
         }
     }
     private boolean checkFileExist(String name){

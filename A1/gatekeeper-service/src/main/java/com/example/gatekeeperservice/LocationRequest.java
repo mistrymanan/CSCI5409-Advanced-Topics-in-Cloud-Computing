@@ -9,12 +9,11 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.http.ResponseEntity;
 
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.Reader;
 
 public class LocationRequest implements RequestType {
     @Override
-    public ResponseEntity<?> retrive(UserInfoRequest userInfoRequest) {
+    public ResponseEntity<?> retrieve(UserInfoRequest userInfoRequest) {
         try (Reader reader = new FileReader("./" + userInfoRequest.getFile())) {
             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);
             for (CSVRecord record : csvParser) {

@@ -4,5 +4,5 @@ import com.example.gatekeeperservice.dto.UserInfoRequest;
 import org.springframework.http.ResponseEntity;
 
 public interface RequestType {
-    ResponseEntity<?> retrive(UserInfoRequest userInfoRequest);
+    ResponseEntity<?> retrieve(UserInfoRequest userInfoRequest);
 }
