@@ -1,4 +1,4 @@
-package com.example.gatekeeperservice.dto;
+package com.example.temperatureretrieverservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
