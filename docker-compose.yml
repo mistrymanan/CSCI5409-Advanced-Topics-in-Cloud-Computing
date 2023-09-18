@@ -1,0 +1,26 @@
+services:
+  gatekeeper:
+    build: ./A1/gatekeeper-service
+    image: mananmistry/gatekeeper-service
+    platform: linux/arm64/v8
+    ports:
+      - "6000:6000"
+    volumes:
+      - data-directory:/app/app-data
+    depends_on:
+      - temperature-service
+  temperature-service:
+    build: ./A1/temperature-retriever-service
+    image: mananmistry/temperature-retriever-service
+    platform: linux/arm64/v8
+    ports:
+      - "6001:6001"
+    volumes:
+      - data-directory:/app/app-data
+volumes:
+  data-directory:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./
+      o: bind
