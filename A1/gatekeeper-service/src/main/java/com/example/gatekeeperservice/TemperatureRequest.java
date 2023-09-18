@@ -12,7 +12,7 @@ public class TemperatureRequest implements RequestType {
     public TemperatureRequest() {
         webClient = WebClient
                 .builder()
-                .baseUrl("http://localhost:6001").build();
+                .baseUrl("http://temperature-service:6001").build();
     }
 
     @Override
