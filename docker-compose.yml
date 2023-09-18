@@ -13,8 +13,8 @@ services:
     build: ./A1/temperature-retriever-service
     image: mananmistry/temperature-retriever-service
     platform: linux/arm64/v8
-    ports:
-      - "6001:6001"
+#    ports:
+#      - "6001:6001"
     volumes:
       - data-directory:/app/app-data
 volumes:
