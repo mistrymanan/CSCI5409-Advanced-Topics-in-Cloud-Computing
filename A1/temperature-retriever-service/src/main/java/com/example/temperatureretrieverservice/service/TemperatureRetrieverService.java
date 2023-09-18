@@ -9,15 +9,13 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
 
 @Service
 public class TemperatureRetrieverService {
     public ResponseEntity<?> getTemperatureInfo(UserInfoRequest userInfoRequest){
-        File file = new File(userInfoRequest.getFile());
-        try (Reader reader = new FileReader(userInfoRequest.getFile())) {
+        try (Reader reader = new FileReader( "./app-data/" + userInfoRequest.getFile())) {
             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);
             for (CSVRecord record : csvParser) {
                 if(record.getRecordNumber() != 1){

@@ -14,7 +14,7 @@ import java.io.Reader;
 public class LocationRequest implements RequestType {
     @Override
     public ResponseEntity<?> retrieve(UserInfoRequest userInfoRequest) {
-        try (Reader reader = new FileReader("./" + userInfoRequest.getFile())) {
+        try (Reader reader = new FileReader("./app-data/"  + userInfoRequest.getFile())) {
             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);
             for (CSVRecord record : csvParser) {
                 if(record.getRecordNumber() != 1){

@@ -20,7 +20,7 @@ public class GatekeeperService {
             return ResponseEntity.ok(new ErrorResponse(userInfoRequest.getFile(),"File not found."));
         }
 //        else if(userInfoRequest.getKey()){
-//          case when key doestn't exist
+//          case when key doesn't exist
 //        }
         else {
             RequestType requestType = RequestTypeFactory.getInstance(userInfoRequest.getKey());
@@ -28,7 +28,7 @@ public class GatekeeperService {
         }
     }
     private boolean checkFileExist(String name){
-        File file = new File(name);
+        File file = new File("./app-data/" +name);
         return file.isFile() && file.exists();
     }
 }
