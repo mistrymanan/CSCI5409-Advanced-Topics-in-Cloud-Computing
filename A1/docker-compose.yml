@@ -1,6 +1,6 @@
 services:
   gatekeeper:
-    build: ./A1/gatekeeper-service
+    build: ./gatekeeper-service
     image: mananmistry/gatekeeper-service
     platform: linux/arm64/v8
     ports:
@@ -10,7 +10,7 @@ services:
     depends_on:
       - temperature-service
   temperature-service:
-    build: ./A1/temperature-retriever-service
+    build: ./temperature-retriever-service
     image: mananmistry/temperature-retriever-service
     platform: linux/arm64/v8
 #    ports:
