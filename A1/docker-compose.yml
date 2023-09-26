@@ -2,7 +2,7 @@ services:
   gatekeeper:
     build: ./gatekeeper-service
     image: mananmistry/gatekeeper-service
-    platform: linux/arm64/v8
+    platform: linux/amd64
     ports:
       - "6000:6000"
     volumes:
@@ -12,7 +12,7 @@ services:
   temperature-service:
     build: ./temperature-retriever-service
     image: mananmistry/temperature-retriever-service
-    platform: linux/arm64/v8
+    platform: linux/amd64
 #    ports:
 #      - "6001:6001"
     volumes:
