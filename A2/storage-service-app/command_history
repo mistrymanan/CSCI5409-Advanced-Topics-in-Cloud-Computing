@@ -1,0 +1,53 @@
+    1  ls
+    2  java
+    3  apt-get update 
+    4  sudo apt-get update
+    5  sudo yum update
+    6  sudo yum 
+    7  sudo amazon-linux-extras enable corretto20
+    8   sudo rpm --import https://yum.corretto.aws/corretto.key 
+    9   sudo curl -L -o /etc/yum.repos.d/corretto.repo https://yum.corretto.aws/corretto.repo
+   10  sudo yum install -y java-20-amazon-corretto-devel
+   11  ip
+   12  ls
+   13  chmod 777 ./storage-service-app-0.0.1-SNAPSHOT.jar 
+   14  java -jar storage-service-app-0.0.1-SNAPSHOT.jar 
+   15  aws
+   16  aws s3 ls
+   17  aws configure
+   18  ls -a
+   19  aws configure
+   20  ls -la
+   21  echo "[default]
+aws_access_key_id=ASIATGH3KAVCNU3XIU6O
+aws_secret_access_key=/imLhN53NN8osx/Z4XDZ0uolPK+d0O4yCHQNPCa+
+aws_session_token=FwoGZXIvYXdzEMn//////////wEaDIntDN8xfIDf7M9AiyLAARucudEqKX5jZ+tYPh7q0HMdAWnXwQTeh6s14KLP0Cha1bv8UoZUD9niROoUadKxZHgEK6nRXaIBek4rl6oMPd6lkxjOgWMExJc3L81pW7Ejcj3JJ9fOyQinfjKlNjLo6VanNs/dx6fD+sVqHzp8BqjRbqBo1xMYxeXKedkxj80rmq9fBqVMuHeVz65UW30UEDAPhTYIkz7wjBTJhKM04xXsWJYKrXHqqkzbLWLp2io8XHtAYsKG/CmO8eDebfPSQyiispCpBjItnCesiJweL/GpT9IKkMwj8eSIrAI+NLAbpHIZVE3v06CMS1xCwsI2PAFWKKC7" ./.aws/credentials 
+   22  ls
+   23  java -jar storage-service-app-0.0.1-SNAPSHOT.jar 
+   24  ks
+   25  ls
+   26  aws s3 ls
+   27  cd .aws/
+   28  ls
+   29  cat config 
+   30  vim config 
+   31  aws s3 ls
+   32  echo "[default]
+aws_access_key_id=ASIATGH3KAVCNU3XIU6O
+aws_secret_access_key=/imLhN53NN8osx/Z4XDZ0uolPK+d0O4yCHQNPCa+
+aws_session_token=FwoGZXIvYXdzEMn//////////wEaDIntDN8xfIDf7M9AiyLAARucudEqKX5jZ+tYPh7q0HMdAWnXwQTeh6s14KLP0Cha1bv8UoZUD9niROoUadKxZHgEK6nRXaIBek4rl6oMPd6lkxjOgWMExJc3L81pW7Ejcj3JJ9fOyQinfjKlNjLo6VanNs/dx6fD+sVqHzp8BqjRbqBo1xMYxeXKedkxj80rmq9fBqVMuHeVz65UW30UEDAPhTYIkz7wjBTJhKM04xXsWJYKrXHqqkzbLWLp2io8XHtAYsKG/CmO8eDebfPSQyiispCpBjItnCesiJweL/GpT9IKkMwj8eSIrAI+NLAbpHIZVE3v06CMS1xCwsI2PAFWKKC7" > ./.aws/credentials 
+   33  echo "[default]
+aws_access_key_id=ASIATGH3KAVCNU3XIU6O
+aws_secret_access_key=/imLhN53NN8osx/Z4XDZ0uolPK+d0O4yCHQNPCa+
+aws_session_token=FwoGZXIvYXdzEMn//////////wEaDIntDN8xfIDf7M9AiyLAARucudEqKX5jZ+tYPh7q0HMdAWnXwQTeh6s14KLP0Cha1bv8UoZUD9niROoUadKxZHgEK6nRXaIBek4rl6oMPd6lkxjOgWMExJc3L81pW7Ejcj3JJ9fOyQinfjKlNjLo6VanNs/dx6fD+sVqHzp8BqjRbqBo1xMYxeXKedkxj80rmq9fBqVMuHeVz65UW30UEDAPhTYIkz7wjBTJhKM04xXsWJYKrXHqqkzbLWLp2io8XHtAYsKG/CmO8eDebfPSQyiispCpBjItnCesiJweL/GpT9IKkMwj8eSIrAI+NLAbpHIZVE3v06CMS1xCwsI2PAFWKKC7" > credentials 
+   34  aws s3 ls
+   35  ls
+   36  cd ..
+   37  ls
+   38  aws s3 ls
+   39  java -jar storage-service-app-0.0.1-SNAPSHOT.jar 
+   40  hisotry
+   41  ls
+   42  ls -la
+   43  history
+   44  history > history
