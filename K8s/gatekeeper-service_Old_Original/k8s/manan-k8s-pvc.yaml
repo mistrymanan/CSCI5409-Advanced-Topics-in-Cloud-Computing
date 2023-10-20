@@ -1,0 +1,26 @@
+---
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  name: manan-pv-pvc
+#spec:
+#  accessModes:
+#    - ReadWriteOnce
+#  resources:
+#    requests:
+#      storage: 1Gi
+#  selector:
+#    matchLabels:
+#      app: gatekeeper-app
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: manan-pvcd
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard
