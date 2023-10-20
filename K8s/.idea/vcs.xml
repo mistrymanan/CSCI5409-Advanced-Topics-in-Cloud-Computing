@@ -3,6 +3,8 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
     <mapping directory="$PROJECT_DIR$/gatekeeper-service" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/gatekeeper-service_Remote" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/temperature-retriever-service" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/temperature-retriever-service_Remote" vcs="Git" />
   </component>
 </project>
