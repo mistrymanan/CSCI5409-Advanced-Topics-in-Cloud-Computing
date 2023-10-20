@@ -1,0 +1,26 @@
+services:
+  gatekeeper:
+    build: ./gatekeeper-service
+    image: mananmistry/gatekeeper-service
+    platform: linux/amd64
+    ports:
+      - "6000:6000"
+    volumes:
+      - data-directory:/app/app-data
+    depends_on:
+      - temperature-service
+  temperature-service:
+    build: ./temperature-retriever-service
+    image: mananmistry/temperature-retriever-service
+    platform: linux/amd64
+#    ports:
+#      - "6001:6001"
+    volumes:
+      - data-directory:/app/app-data
+volumes:
+  data-directory:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./
+      o: bind
