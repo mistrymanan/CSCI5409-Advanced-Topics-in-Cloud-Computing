@@ -1,0 +1,39 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
+steps:
+  - name: 'maven:3.9.4'
+    entrypoint: 'mvn'
+    args: [ 'install' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'us-east1-docker.pkg.dev/$PROJECT_ID/gatekeeper/gatekeeper:$COMMIT_SHA' ,'.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'push', 'us-east1-docker.pkg.dev/$PROJECT_ID/gatekeeper/gatekeeper:$COMMIT_SHA']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+    - '-c'
+    - 'gcloud container clusters get-credentials manans-cluster --region us-east1-b'
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'kubectl'
+    args:
+      - 'apply'
+      - '-f'
+      - 'k8s/manan-k8s-pvc.yaml'
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'kubectl'
+    args:
+      - 'apply'
+      - '-f'
+      - 'k8s/manan-k8s-service.yaml'
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    id: Deployment
+    args:
+      [
+        'run',
+        '--filename=k8s/manan-k8s-deployment.yaml',
+        '--image=us-east1-docker.pkg.dev/$PROJECT_ID/gatekeeper/gatekeeper:$COMMIT_SHA',
+        '--location=us-east1-b',
+        '--cluster=manans-cluster',
+      ]
+images:
+  - 'us-east1-docker.pkg.dev/$PROJECT_ID/gatekeeper/gatekeeper:$COMMIT_SHA'

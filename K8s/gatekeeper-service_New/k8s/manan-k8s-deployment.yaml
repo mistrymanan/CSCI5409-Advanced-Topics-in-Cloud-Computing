@@ -1,0 +1,50 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gatekeeper-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gatekeeper-app
+  template:
+    metadata:
+      labels:
+        app: gatekeeper-app
+    spec:
+      volumes:
+        - name: manan-pvcd
+          persistentVolumeClaim:
+            claimName: manan-pvcd
+      containers:
+        - name: gatekeeper-app-container
+          image: us-east1-docker.pkg.dev/stoked-axe-388413/gatekeeper/gatekeeper
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6000
+              name: http
+              protocol: TCP
+          volumeMounts:
+            - name: manan-pvcd
+              mountPath: /manan_PV_dir
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/info
+              port: 6000
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 60
+            successThreshold: 1
+            timeoutSeconds: 300
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health
+              port: 6000
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 60
+            successThreshold: 1
+            timeoutSeconds: 300
