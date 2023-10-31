@@ -11,7 +11,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product implements Serializable {
+    private static final long serialVersionUID = 851032424151782496L;
     String name;
-    Integer price;
+    String price;
     boolean availability;
 }

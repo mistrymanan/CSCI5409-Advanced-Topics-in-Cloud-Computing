@@ -18,6 +18,6 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     String name;
-    Integer price;
+    String price;
     boolean availability;
 }
