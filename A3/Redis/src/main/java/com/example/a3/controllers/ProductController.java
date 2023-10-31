@@ -25,8 +25,8 @@ public class ProductController {
     @PostMapping("/store-products")
     ResponseEntity<Message> storeProducts(@RequestBody ProductsRequest productList){
         if(appType.equals("RDS")){
-            System.out.println("RDS");
-            productService.save(productList);
+//            System.out.println("RDS");
+//            productService.save(productList);
         }else if(appType.equals("REDIS")){
             System.out.println("REDIS");
             cacheService.storeInRedisApplication(productList.getProducts());
@@ -39,16 +39,16 @@ public class ProductController {
         if(appType.equals("RDS")){
             System.out.println("RDS");
             if(cacheService.isKeyInCache("products")){
-                System.out.println("42;");
                 List<Product> productResponse = cacheService.getFromRedis();
                 response.setProducts(productResponse);
                 response.setCache(true);
-            }else{
-                List<com.example.a3.dto.Product> productList = productService.getProducts();
-                response.setProducts(productList);
-                response.setCache(false);
-                cacheService.storeInRedis(productList);
             }
+//            else{
+//                List<com.example.a3.dto.Product> productList = productService.getProducts();
+//                response.setProducts(productList);
+//                response.setCache(false);
+//                cacheService.storeInRedis(productList);
+//            }
         }else if(appType.equals("REDIS")){
             System.out.println("REDIS");
             List<Product> productResponse = cacheService.getFromRedis();
