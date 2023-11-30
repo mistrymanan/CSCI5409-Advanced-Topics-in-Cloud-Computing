@@ -7,8 +7,10 @@ import com.google.gson.JsonSyntaxException;
 import io.kubernetes.client.custom.IntOrString;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.ApiException;
+import io.kubernetes.client.openapi.Configuration;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.*;
+import io.kubernetes.client.util.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +27,12 @@ public class DeploymentManager {
 
     public DeploymentManager() {
         ApiClient client = null;
-//        try {
-//            client = Config.defaultClient();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        Configuration.setDefaultApiClient(client);
+        try {
+            client = Config.defaultClient();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Configuration.setDefaultApiClient(client);
         this.coreV1Api = new CoreV1Api();
     }
 
@@ -39,11 +41,11 @@ public class DeploymentManager {
 //        appDeploymentRepositories.save(deploymentInfo);
         if(appDeploymentRepositories.existsById(deploymentRequest.getId())){
             Optional<AppDeployment> deploymentInfo = appDeploymentRepositories.findAppDeploymentById(deploymentRequest.getId());
-//                if(deploymentInfo.isPresent() && !deploymentInfo.get().getStatus().equals("Deployed") && deploymentInfo.get().getRequest().equals("CREATE")){
-//                    createApp(coreV1Api,deploymentInfo.get());
-//                }else if(deploymentInfo.isPresent() && deploymentInfo.get().getRequest().equals("DELETE")){
-//                    removeDeployment(coreV1Api,deploymentInfo.get());
-//                }
+                if(deploymentInfo.isPresent() && !deploymentInfo.get().getStatus().equals("Deployed") && deploymentRequest.equals("CREATE")){
+                    createApp(coreV1Api,deploymentInfo.get());
+                }else if(deploymentInfo.isPresent() && deploymentRequest.getRequest().equals("DELETE")){
+                    removeDeployment(coreV1Api,deploymentInfo.get());
+                }
         }
 
     }
