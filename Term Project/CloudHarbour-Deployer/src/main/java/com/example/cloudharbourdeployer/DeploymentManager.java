@@ -30,18 +30,29 @@ public class DeploymentManager {
         try {
             client = Config.defaultClient();
         } catch (IOException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
         Configuration.setDefaultApiClient(client);
         this.coreV1Api = new CoreV1Api();
     }
 
+    public void checkServiceStatus(String appId){
+        Optional<AppDeployment> deploymentInfo = appDeploymentRepositories.findAppDeploymentById(appId);
+       if(deploymentInfo.isPresent()){
+           String loadBalancerIp = getServiceLoadBalancerURL(coreV1Api,deploymentInfo.get().getAppName());
+           System.out.println("LoadBalancerIp->"+loadBalancerIp);
+       }
+
+
+    }
     public void processDeploymentMessage(DeploymentRequest deploymentRequest) {
 //        System.out.println("Exist By AppName=>"+appDeploymentRepositories.existsAppDeploymentByAppName(deploymentInfo.getAppName()));
 //        appDeploymentRepositories.save(deploymentInfo);
+        System.out.println("Does App Exist !->"+appDeploymentRepositories.existsById(deploymentRequest.getId()));
         if(appDeploymentRepositories.existsById(deploymentRequest.getId())){
             Optional<AppDeployment> deploymentInfo = appDeploymentRepositories.findAppDeploymentById(deploymentRequest.getId());
-                if(deploymentInfo.isPresent() && !deploymentInfo.get().getStatus().equals("Deployed") && deploymentRequest.equals("CREATE")){
+                if(deploymentInfo.isPresent() && !deploymentInfo.get().getStatus().equals("Deployed") && deploymentRequest.getRequest().equals("CREATE")){
                     createApp(coreV1Api,deploymentInfo.get());
                 }else if(deploymentInfo.isPresent() && deploymentRequest.getRequest().equals("DELETE")){
                     removeDeployment(coreV1Api,deploymentInfo.get());
@@ -51,14 +62,15 @@ public class DeploymentManager {
     }
 
     private void createApp(CoreV1Api coreV1Api,AppDeployment deploymentInfo){
+        System.out.println("ChecknamespaceExist->"+checkNamespaceExist(coreV1Api, deploymentInfo.getAppName()));
         if (!checkNamespaceExist(coreV1Api, deploymentInfo.getAppName())) {
             createNamespace(coreV1Api, deploymentInfo.getAppName());
         }
-
+        System.out.println("CheckPodExist->"+checkPodExist(coreV1Api, deploymentInfo.getAppName()));
         if (!checkPodExist(coreV1Api, deploymentInfo.getAppName())) {
             addPod(coreV1Api, deploymentInfo);
         }
-
+        System.out.println("CheckServiceExist->"+checkServiceExist(coreV1Api, deploymentInfo.getAppName()));
         if (!checkServiceExist(coreV1Api, deploymentInfo.getAppName())) {
             addService(coreV1Api, deploymentInfo);
             String loadBalancerIp = getServiceLoadBalancerURL(coreV1Api,deploymentInfo.getAppName());
@@ -69,9 +81,11 @@ public class DeploymentManager {
         }
     }
     public void removeDeployment(CoreV1Api coreV1Api, AppDeployment deployment) {
-        deleteService(coreV1Api, deployment);
-        deletePod(coreV1Api, deployment);
-        deleteNamespace(coreV1Api, deployment);
+        boolean result = deleteNamespace(coreV1Api, deployment);
+        if(result){
+            deployment.setStatus("Deleted");
+            appDeploymentRepositories.save(deployment);
+        }
     }
     private void createNamespace(CoreV1Api coreV1Api, String namespace) {
         V1Namespace v1Namespace = new V1Namespace();
@@ -221,13 +235,28 @@ public class DeploymentManager {
             v1Service = api.readNamespacedService(appName,appName,null,null,null);
             System.out.println("v1Service->");
             System.out.println(v1Service);
-            System.out.println("v1Status->");
+            System.out.println("Entering in While loop..");
+            while(v1Service.getStatus().getLoadBalancer().getIngress()==null){
+                Thread.sleep(5000);
+                System.out.println("In Loop");
+                v1Service = api.readNamespacedService(appName,appName,null,null,null);
+                try{
+                    System.out.println("ServiceLoadBalancer->"+v1Service.getStatus().getLoadBalancer());
+                    System.out.println("v1Service.getStatus().getLoadBalancer().getIngress()->"+v1Service.getStatus().getLoadBalancer().getIngress());
+                }catch (NullPointerException nullPointerException){
+                    System.out.println("Null Pointer Occurred!");
+                }
+
+            }
             System.out.println(v1Service.getStatus());
-            return v1Service.getSpec().getLoadBalancerIP();
+            System.out.println("v1Service.getStatus().getLoadBalancer().getIngress().get(0).getHostname()=>"+v1Service.getStatus().getLoadBalancer().getIngress().get(0).getHostname());
+            return v1Service.getStatus().getLoadBalancer().getIngress().get(0).getHostname();
         } catch (ApiException e) {
             if(e.getMessage().contains("Not Found")){
 //                return null;
             }
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 //        return true;

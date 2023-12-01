@@ -290,6 +290,7 @@ Resources:
       - ControlPlaneSecurityGroup
       - PrivateSubnet02
       - PrivateSubnet01
+
   EksNodegroup:
     Type: 'AWS::EKS::Nodegroup'
     DependsOn: EksCluster
@@ -342,7 +343,10 @@ Resources:
 
   MyEC2Instance:
     Type: "AWS::EC2::Instance"
-    DependsOn: EC2SecurityGroup
+    DependsOn:
+      - EC2SecurityGroup
+      - EksCluster
+      - DeploymentQueue
     Properties:
       ImageId: ami-09538990a0c4fe9be
       InstanceType: t2.micro
@@ -368,6 +372,67 @@ Resources:
           curl -LO "https://dl.k8s.io/release/v1.23.6/bin/linux/amd64/kubectl"
           sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
           sudo su ec2-user -c 'aws eks update-kubeconfig --region us-east-1 --name CloudHarbour'
+          git clone https://github.com/mistrymanan/CloudHarbour.git
+          cd CloudHarbour/CloudHarbour-Deployer/target
+          chmod 665 ./CloudHarbour-Deployer-0.0.1-SNAPSHOT.jar
+          java -jar ./CloudHarbour-Deployer-0.0.1-SNAPSHOT.jar &
+
+  EC2HttpServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable public access to http
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: "-1"
+          CidrIp: 0.0.0.0/0
+      VpcId: !Ref VPC
+
+  MyEC2ProducerInstance:
+    Type: "AWS::EC2::Instance"
+    DependsOn:
+      - EC2SecurityGroup
+      - EksCluster
+      - DeploymentQueue
+      - MyEC2Instance
+    Properties:
+      ImageId: ami-09538990a0c4fe9be
+      InstanceType: t2.micro
+      KeyName: manan-mistry-serverless
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: True
+          DeviceIndex: "0"
+          SubnetId: !Ref PublicSubnet01
+          GroupSet:
+            - !Ref EC2HttpServerSecurityGroup
+      Tags:
+        - Key: 'Name'
+          Value: 'CloudHarbourProducer'
+      IamInstanceProfile: 'LabRole'
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          echo "Hello from UserData!" > /home/ec2-user/userdata_output.txt
+          sudo yum update -y
+          sudo yum install git -y
+          sudo yum install java-17-amazon-corretto -y
+          echo "Hello from UserData!" > /home/ec2-user/userdata_output.txt
+          curl -LO "https://dl.k8s.io/release/v1.23.6/bin/linux/amd64/kubectl"
+          git clone https://github.com/mistrymanan/CloudHarbour.git
+          chmod 665 ./CloudHarbour/CloudHarbour-Deployment-Producer/target/CloudHarbour-Deployment-Producer-0.0.1-SNAPSHOT.jar
+          sudo amazon-linux-extras install nginx1 -y
+          sudo systemctl enable nginx.service
+          sudo systemctl start nginx.service
+          sudo cp -rf ./CloudHarbour/frontend/cloud_harbour_frontend/build/* /usr/share/nginx/html/
+          nohup java -jar ./CloudHarbour/CloudHarbour-Deployment-Producer/target/CloudHarbour-Deployment-Producer-0.0.1-SNAPSHOT.jar &
+#          cd frontend/cloud_harbour_frontend/
+
 Outputs:
   PublicSubnetIds:
     Description: Public Subnets IDs in the VPC
